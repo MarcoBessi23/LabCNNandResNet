@@ -1,0 +1,34 @@
+# Ignora l'ambiente virtuale
+venv/
+env/
+.venv/
+data
+dataset
+
+# Ignora cartelle di output, log o dati temporanei
+output/
+logs/
+temp/
+
+# Ignora file creati da Python, come bytecode compilato
+__pycache__/
+*.pyc
+
+# Ignora file di salvataggio modelli o checkpoints
+*.h5
+*.pkl
+
+# Ignora file di sistema (es. macOS e Windows)
+.DS_Store
+Thumbs.db
+
+# Ignora file temporanei di editor (es. vim, emacs, nano)
+*.swp
+*.swo
+
+#ignoro file troppo grandi che non servono a niente nel progetto
+Ex2/combined.pt
+Ex2/segmented.pt
+
+
+
