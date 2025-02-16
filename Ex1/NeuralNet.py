@@ -347,7 +347,7 @@ class Trainer():
         plt.plot(self.results['test_loss'], color = 'red')
         plt.xlabel('epochs')
         plt.ylabel('training loss')
-        plt.savefig(self.path_train)
+        plt.savefig(self.path_loss)
         plt.close()
 
         

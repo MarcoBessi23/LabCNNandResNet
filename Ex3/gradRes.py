@@ -8,7 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torch.utils.data import Subset, Dataset, DataLoader
-from NeuralNet import CNN, Trainer
+from NeuralNet import ResNet, Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -59,23 +59,23 @@ test_dataloader = DataLoader(dataset=test_data,
 
 loss = torch.nn.CrossEntropyLoss()
 
-#model = CNN()
-#model.load_state_dict(torch.load('Ex3/model.pt', map_location=device ))
-class Hooked_CNN(nn.Module):
+model = ResNet()
+model.load_state_dict(torch.load('Ex3/ResNet_weights.pth', map_location=device ))
+class Hooked_Net(nn.Module):
     def __init__(self):
-        super(Hooked_CNN, self).__init__()
+        super(Hooked_Net, self).__init__()
 
-        self.cnn = CNN()
-        self.cnn.load_state_dict(torch.load('Ex3/model.pt', map_location=device ))
+        self.resnet = ResNet()
+        self.resnet.load_state_dict(torch.load('Ex3/ResNet_weights.pth', map_location=device ))
 
-        self.features_conv = self.cnn.conv[:-2] #from the first layer to the last convolutional layer
+        self.features_conv = self.resnet.conv[:-1] #from the first layer to the last convolutional layer
 
-        self.downsample = nn.Sequential(
-            nn.MaxPool2d(2),
-            nn.Dropout2d(0.2)
-            )
+        #self.downsample = nn.Sequential(
+        #    nn.MaxPool2d(2),
+        #    nn.Dropout2d(0.2)
+        #    )
 
-        self.classifier = self.cnn.classification
+        self.classifier = self.resnet.classification
         self.gradients = None
 
     def activations_hook(self, grad):
@@ -84,7 +84,7 @@ class Hooked_CNN(nn.Module):
     def forward(self, x):
         x = self.features_conv(x)
         h = x.register_hook(self.activations_hook)
-        x = self.downsample(x)
+        #x = self.downsample(x)
         x = self.classifier(x)
         return x
     
@@ -95,11 +95,11 @@ class Hooked_CNN(nn.Module):
         return self.features_conv(x)
     
 
-cnn = Hooked_CNN()
-cnn.eval()
+res = Hooked_Net()
+res.eval()
 
 im, lab = next(iter(test_dataloader))
-pred = cnn(im)
+pred = res(im)
 predicted = pred.argmax(dim= 1)
 print(predicted)
 print(lab)
@@ -122,13 +122,13 @@ plt.savefig('Ex3/images/cat.png')
 pred[:, 3].backward()
 
 # pull the gradients out of the model
-gradients = cnn.get_activations_gradient()
+gradients = res.get_activations_gradient()
 
 # pool the gradients across the channels
 pooled_gradients = torch.mean(gradients, dim=[0, 2, 3])
 
 # get the activations of the last convolutional layer
-activations = cnn.get_activations(im).detach()
+activations = res.get_activations(im).detach()
 print(activations.shape)
 
 # weight the channels by corresponding gradients
@@ -142,7 +142,7 @@ heatmap = F.relu(heatmap)#np.maximum(heatmap, 0)
 # normalize the heatmap
 heatmap /= torch.max(heatmap)
 plt.matshow(heatmap.squeeze())
-plt.savefig('./Ex3/images/heatmap.png')
+plt.savefig('./Ex3/images/heatmap_res.png')
 #plt.show()
 
 
@@ -158,4 +158,4 @@ heatmap = np.uint8(255 * heatmap)
 heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))
 heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 superimposed_img = heatmap * 0.4 + img
-cv2.imwrite('./Ex3/images/cat_heatmap.png', superimposed_img)
+cv2.imwrite('./Ex3/images/cat_heatmap_res.png', superimposed_img)

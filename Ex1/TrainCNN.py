@@ -60,13 +60,14 @@ test_dataloader = DataLoader(dataset=test_data,
                              batch_size = batch_size,
                              shuffle = False)
 
-
-epochs = 20
+path_loss = os.path.join(os.getcwd(), 'Ex1/Results_loss', 'loss_CNN.png')
+path_accuracy = os.path.join(os.getcwd(), 'Ex1/Results_loss', 'accuracy_CNN.png')
+epochs = 50
 loss   = torch.nn.CrossEntropyLoss()
 model  = CNN_Paper()
-optimizer = torch.optim.SGD(model.parameters(), lr=0.1, weight_decay= 1e-5, momentum=0.9)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 
-trainer = Trainer(model, loss, optimizer, epochs, device)
-trainer.train_model(train_dataloader, test_dataloader)
-trainer.plot_results()
+#trainer = Trainer(model, loss, optimizer, epochs,path_loss, path_accuracy, device)
+#trainer.train_model(train_dataloader, test_dataloader)
+#trainer.plot_results()

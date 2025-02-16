@@ -66,8 +66,8 @@ pip install torch torchvision matplotlib opencv-python
 <span style="font-size:18px;"> What I expected to observe was that the gradient for the **initial layers of the ResNet** would be significantly larger compared to the **CNN**. However, as you'll see, the results were not as anticipated.
 
 <div style="display: flex; justify-content: space-between;">
-  <img src="/home/marco/Lab1_DLA/Ex1/Results_grad/trained_CNN.png" alt="Plain35" width="45%">
-  <img src="/home/marco/Lab1_DLA/Ex1/Results_grad/trained_ResNet.png" alt="Residual35" width="45%">
+  <img src="Ex1/Results_grad/trained_CNN.png" alt="Plain35" width="45%">
+  <img src="Ex1/Results_grad/trained_ResNet.png" alt="Residual35" width="45%">
 </div>
 <br><br>
 
