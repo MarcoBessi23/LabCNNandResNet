@@ -11,16 +11,65 @@ from torch.utils.data import Subset, Dataset, DataLoader
 import matplotlib.pyplot as plt
 
 
+#class conv_block(nn.Module):
+#
+#    def __init__(self, in_c, out_c, size = 3, padding = 1, pool = False):
+#        super().__init__()
+#        if pool:
+#            self.convo = nn.Sequential(
+#                nn.MaxPool2d(2),
+#                nn.Conv2d(in_c, out_c, kernel_size = size, padding = padding),
+#                nn.BatchNorm2d(out_c),
+#                nn.ReLU()
+#                )
+#
+#        else :
+#            self.convo = nn.Sequential(
+#                            nn.Conv2d(in_c, out_c, kernel_size = size ,padding = padding),
+#                            nn.BatchNorm2d(out_c),
+#                            nn.ReLU()
+#                            )
+#
+#    def forward(self, x):
+#        return self.convo(x)
+#
+#
+#class CNN(nn.Module):
+#    def __init__(self, input_channels= 3, num_classes=10):
+#        super().__init__()
+#        self.conv = nn.Sequential(
+#            conv_block(input_channels, 32, size = 3),
+#            conv_block(32,32, size = 3),
+#            nn.Dropout2d(0.2),
+#            conv_block(32,64, size=3, pool= True),
+#            conv_block(64,64,size=3),
+#            nn.Dropout2d(0.2),
+#            conv_block(64,128,size=3, pool= True),
+#            conv_block(128,128,size=3),
+#            nn.MaxPool2d(2),
+#            nn.Dropout2d(0.2)
+#        )
+#        self.classification = nn.Sequential(
+#            nn.Flatten(),
+#            nn.Linear(2048, 128),
+#            nn.ReLU(),
+#            nn.Dropout(0.2),
+#            nn.Linear(128, num_classes)
+#        )
+#    def forward(self, x):
+#
+#        return self.classification(self.conv(x))
+#
+#
 class conv_block(nn.Module):
 
-    def __init__(self, in_c, out_c, size = 3, padding = 1, pool = False):
+    def __init__(self, in_c, out_c, size = 3, padding = 1, stride = False):
         super().__init__()
-        if pool:
+        if stride:
             self.convo = nn.Sequential(
-                nn.MaxPool2d(2),
-                nn.Conv2d(in_c, out_c, kernel_size = size, padding = padding),
+                nn.Conv2d(in_c, out_c, kernel_size = size, padding = padding, stride=2),
                 nn.BatchNorm2d(out_c),
-                nn.ReLU()
+                nn.ReLU(),
                 )
 
         else :
@@ -33,32 +82,6 @@ class conv_block(nn.Module):
     def forward(self, x):
         return self.convo(x)
 
-
-class CNN(nn.Module):
-    def __init__(self, input_channels= 3, num_classes=10):
-        super().__init__()
-        self.conv = nn.Sequential(
-            conv_block(input_channels, 32, size = 3),
-            conv_block(32,32, size = 3),
-            nn.Dropout2d(0.2),
-            conv_block(32,64, size=3, pool= True),
-            conv_block(64,64,size=3),
-            nn.Dropout2d(0.2),
-            conv_block(64,128,size=3, pool= True),
-            conv_block(128,128,size=3),
-            nn.MaxPool2d(2),
-            nn.Dropout2d(0.2)
-        )
-        self.classification = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(2048, 128),
-            nn.ReLU(),
-            nn.Dropout(0.2),
-            nn.Linear(128, num_classes)
-        )
-    def forward(self, x):
-
-        return self.classification(self.conv(x))
 
 
 
@@ -97,24 +120,6 @@ class Shortcut(nn.Module):
 
 
 
-class block_builder(nn.Module):
-    def __init__(self, n_layers, n_filters, res = False):
-        super().__init__()
-        layers = []
-        if res:
-            for _ in range(n_layers):
-                layers.append(Shortcut(n_filters, n_filters))
-                self.block = nn.Sequential(*layers)
-        else :
-            for _ in range(n_layers):
-                layers.append(conv_block(n_filters, n_filters))
-                self.block = nn.Sequential(*layers)
-
-    def forward(self, x):
-        return self.block(x)
-
-
-
 class Res_block(nn.Module):
     '''
     Residual block with the linear projection shortcut as described by method (B), 
@@ -123,8 +128,8 @@ class Res_block(nn.Module):
     def __init__(self, input_channels, output_channels, short = False):
         super().__init__()
         self.short = short
-        self.input = input_channels
-        self.out = output_channels
+        #self.input = input_channels
+        #self.out = output_channels
         self.linear_proj = nn.Conv2d(input_channels, output_channels, kernel_size = 1 ,stride=2)
 
         if short:
@@ -144,11 +149,26 @@ class Res_block(nn.Module):
         if self.short:
             y = self.linear_proj(x)
             return F.relu(self.identity(x) + y)
-
+        
         else :
             return F.relu(self.identity(x) + x)
 
 
+class block_builder(nn.Module):
+    def __init__(self, n_layers, n_filters, res = False):
+        super().__init__()
+        layers = []
+        if res:
+            for _ in range(n_layers):
+                layers.append(Shortcut(n_filters, n_filters))
+                self.block = nn.Sequential(*layers)
+        else :
+            for _ in range(n_layers):
+                layers.append(conv_block(n_filters, n_filters))
+                self.block = nn.Sequential(*layers)
+
+    def forward(self, x):
+        return self.block(x)
 
 
 class ResNet(nn.Module):
@@ -172,7 +192,6 @@ class ResNet(nn.Module):
     def forward(self,x):
         conv = self.conv(x)
         return self.classification(conv)
-
 
 
 
