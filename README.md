@@ -152,3 +152,33 @@ Here, I present the results for some randomly selected images from the test set.
 </div>
 <br><br>
 
+## **GRAD CAM**
+
+<span style="font-size:18px;">Grad-CAM is a powerful technique for interpreting CNNs by highlighting the most important regions of an image for a given class. This helps to:  
+
+- Understand the model’s decision-making process  
+- Debug classification errors  
+- Improve the transparency and explainability of neural networks  
+<br><br>
+<span style="font-size:18px;">In this exercise, I implemented the Grad-CAM method and applied it to an image from the 'cat' class in CIFAR-10 as an illustrative example.  
+<br><br>
+![cat cifar10](Ex3/images/cat.png)
+<br><br>
+<span style="font-size:18px;">I used a CNN that achieved an accuracy score of 0.80 on the test set.When analyzing the model's behavior, we observe that the generated heatmap highlights the details of the animal's face, which the model uses to correctly identify the cat.
+
+<br><br>
+<div style="display: flex; justify-content: space-between;">
+  <img src="Ex3/images/heatmap.png" alt="Heatmap" width="45%">
+  <img src="Ex3/images/cat_heatmap.png" alt="Superimposed image" width="45%">
+</div>
+<br><br>
+
+### **Again on ResNet**
+<span style="font-size:18px;"> Finally, I applied Grad-CAM to the ResNet model as well. In this case, it's interesting to note that the resulting heatmap is more diffuse and focuses on additional details of the animal, such as the tail and paws. I interpreted this as an effect of the residual connections, which allow the image to flow through the layers, enabling the model to have a more general "vision" of the image.
+
+<br><br>
+<div style="display: flex; justify-content: space-between;">
+  <img src="Ex3/images/heatmap_res.png" alt="Heatmap" width="45%">
+  <img src="Ex3/images/cat_heatmap_res.png" alt="Superimposed image" width="45%">
+</div>
+<br><br>
