@@ -1,6 +1,6 @@
 # Unveiling the Power of Convolutional Neural Networks  
 
-<span style="font-size:18px;">Deep learning has revolutionized computer vision, but what makes some architectures stand out? This project dives into the core of Convolutional Neural Networks (CNNs) through three cutting-edge experiments, unraveling the secrets behind their success and pushing the boundaries of interpretability.  
+<span style="font-size:18px;">Deep learning has revolutionized computer vision, but what makes some architectures stand out?  
 
 ## Experiments  
 
@@ -9,10 +9,10 @@
    on CIFAR10 dataset. 
 
 2. **Fully Convolutionalize a Network for Digit Recognition**  
-   <span style="font-size:18px;">Can a fully convolutional architecture effectively classify handwritten digits? This experiment builds an FCN from scratch, demonstrating its efficiency in digit recognition tasks.  
+   <span style="font-size:18px;">Can a fully convolutional architecture effectively classify handwritten digits? This experiment builds an FCN, demonstrating its efficiency in digit recognition tasks.  
 
-3. **Seeing Through the Eyes of a CNN – Grad-CAM in Action**  
-   <span style="font-size:18px;">Neural networks are often seen as black boxes, but what if we could visualize their 'thought' process? This experiment brings interpretability to life using Grad-CAM to highlight the most important regions in an image that drive model predictions.  
+3. **Interpreting CNN decision – Grad-CAM in Action**  
+   <span style="font-size:18px;">Neural networks are often seen as black boxes, but what if we could visualize their 'thought' process? This experiment brings interpretability to life using Grad-CAM to highlight the most important regions in an image that drive model predictions.
 
 ## Requirements  
 
