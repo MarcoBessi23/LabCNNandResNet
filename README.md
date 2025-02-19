@@ -1,12 +1,9 @@
-# Unveiling the Power of Convolutional Neural Networks  
-
-<span style="font-size:18px;">Deep learning has revolutionized computer vision, but what makes some architectures stand out?  
+# Convolutional Neural Networks, FCN, RESNET
 
 ## Experiments  
 
 1. **ResNetsvsCNN**  
-   <span style="font-size:18px;">Why do ResNets leave traditional CNNs in the dust? In this exercise I look at how residual connections combat the vanishing gradient problem and highlight some other properties through a comparison between CNN and RESNET
-   on CIFAR10 dataset. 
+   <span style="font-size:18px;">Why do ResNets leave traditional CNNs in the dust? In this exercise I look at how residual connections tackle the vanishing gradient problem and highlight some other properties through a comparison between CNN and RESNET on CIFAR10 dataset. 
 
 2. **Fully Convolutionalize a Network for Digit Recognition**  
    <span style="font-size:18px;">Can a fully convolutional architecture effectively classify handwritten digits? This experiment builds an FCN, demonstrating its efficiency in digit recognition tasks.  
@@ -125,10 +122,51 @@ I repeated the same experiment with two networks, each containing <strong>53 lay
 <span style="font-size:18px;">It is also interesting to note the behavior of the gradient norms and the standard deviation across the layers. As we can see, especially in the early iterations, the gradients of the plain network appear to be more noisy and bigger than those of the ResNet, which could partly explain the observed behavior of the training loss.
 <br><br>
 <div style="display: flex; justify-content: space-between;">
-  <img src="Ex1/Results_grad/grad_comparison.png" alt="Gradient Comparison CNN" width="45%">
+  <img src="Ex1/Results_grad/grad_norm.png" alt="Gradient Comparison CNN" width="45%">
   <img src="Ex1/Results_grad/grad_std.png" alt="Gradient Comparison ResNet" width="45%">
 </div>
 <br><br>
+
+## Usage
+There are two different scripts, ResidualConnection.py to confront magnitudes of two layers and gradient_magnitude.py to reproduce std and norm comparison.
+
+### Running ResidualConnection
+To run the ResidualConnection.py and analyze the gradient magnitude of different models, use the following command:
+
+```bash
+python ResidualConnection.py --model <MODEL_NAME>
+```
+
+### Available Models
+You can choose from the following model names:
+
+- `CNN35` – Standard CNN with 35 layers
+- `Residual35` – ResNet with 35 layers
+- `CNN53` – Standard CNN with 53 layers
+- `Residual53` – ResNet with 53 layers
+- `CNN_tanh35` – CNN with tanh activation (35 layers)
+- `Residual_tanh35` – ResNet with tanh activation (35 layers)
+- `CNN_tanh53` – CNN with tanh activation (53 layers)
+- `Residual_tanh53` – ResNet with tanh activation (53 layers)
+- `trained_CNN` – Pre-trained CNN model
+- `Residual_trained` – Pre-trained ResNet model
+
+### Output
+The script will generate a plot of the gradient magnitude in the the two layers and save it in the `Ex1/Results_grad/` directory as `<MODEL_NAME>.png`.
+
+### Running gradient_magitude
+To execute the gradient_magitudes.py script, use the following command:
+
+```bash
+python gradient_magitudes.py --metric <norm|std>
+```
+
+### Arguments
+- `--metric`: Specifies the gradient metric to compute. Options:
+  - `norm`: Computes the gradient norm.
+  - `std`: Computes the gradient standard deviation.
+
+
 
 ## **CNN NETWORK SURGERY**
 
@@ -151,6 +189,24 @@ Here, I present the results for some randomly selected images from the test set.
   <img src="Ex2/results_ex2/multi_digit_pred.png" alt="Gradient Comparison ResNet" width="45%">
 </div>
 <br><br>
+
+## Usage
+To run the fullyconv script, use the following command:
+
+```bash
+python fullyconv.py --model <MODEL_NAME> --mode <MODE> [--test_type <TEST_TYPE>]
+```
+
+### Arguments:
+- `--model`: Choose the model to use. Options:
+  - `standardFCN`
+  - `fcn8`
+- `--mode`: Select the mode. Options:
+  - `train` → Trains the selected model
+  - `test` → Tests the selected model
+- `--test_type` (Required only if `--mode test` is selected):  
+  - `grid` → Runs the test on a random grid with size 56x84
+  - `SegmentedMNIST` → Runs the test on the SegmentedMNIST dataset
 
 ## **GRAD CAM**
 
