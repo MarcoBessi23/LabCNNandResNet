@@ -8,7 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torch.utils.data import Subset, Dataset, DataLoader
-from NeuralNet import CNN, Trainer
+from NeuralNet import CNN
 from utils import denormalize_image, save_image, compute_class_activation_map, overlay_heatmap
 import matplotlib.pyplot as plt
 
@@ -55,7 +55,7 @@ class Hooked_CNN(nn.Module):
         super(Hooked_CNN, self).__init__()
 
         self.cnn = CNN()
-        self.cnn.load_state_dict(torch.load('Ex3/model.pt', map_location=device ))
+        self.cnn.load_state_dict(torch.load('Ex3/parameters/model.pt', map_location=device ))
 
         self.features_conv = self.cnn.conv[:-2] #from the first layer to the last convolutional layer
 

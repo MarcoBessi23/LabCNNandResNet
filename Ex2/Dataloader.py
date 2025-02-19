@@ -18,13 +18,10 @@ transform = transforms.Compose([
     transforms.Normalize((0.1307,), (0.3081,))
 ])
 
-
-
 # Load MNIST train and test.
 ds_train   = MNIST(root='./dataset', train = True,  download = False)
 ds_test    = MNIST(root='./dataset', train = False, download = False)
 batch_size = 64
-
 
 from PIL import Image
 
@@ -49,4 +46,3 @@ class MNISTSegmentationDataset(Dataset):
         segmentation_mask = torch.tensor(segmentation_mask, dtype= torch.long)
         
         return img, segmentation_mask
-

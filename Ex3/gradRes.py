@@ -8,7 +8,7 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torch.utils.data import Subset, Dataset, DataLoader
-from NeuralNet import ResNet, Trainer
+from ResidualNetwork import ResNet
 import matplotlib.pyplot as plt
 from utils import denormalize_image, save_image, compute_class_activation_map, overlay_heatmap
 
@@ -60,7 +60,7 @@ class Hooked_Net(nn.Module):
         super(Hooked_Net, self).__init__()
 
         self.resnet = ResNet()
-        self.resnet.load_state_dict(torch.load('Ex3/ResNet_weights.pth', map_location=device ))
+        self.resnet.load_state_dict(torch.load('Ex3/parameters/ResNet_weights.pth', map_location=device ))
 
         self.features_conv = self.resnet.conv[:-1] #from the first layer to the last convolutional layer
 
