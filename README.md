@@ -52,7 +52,7 @@ pip install torch torchvision matplotlib opencv-python
 
 <br><br>
 
-<span style="font-size:18px;">CNNs easily reach 80% accuracy (just take the model I trained in the Grad-CAM section, for example), but in this case, adding more layers led to the degradation issue. On the other hand, the ResNet model achieved 85% accuracy, demonstrating how residual connections can help avoid the degradation problem and allow for deeper, more efficient networks.
+<span style="font-size:18px;">CNNs trained on the cifar10 dataset easily reach 80% accuracy (just take the model I trained in the Grad-CAM section, for example), but in this case, adding more layers led to the degradation issue. On the other hand, the ResNet model achieved 85% accuracy, demonstrating how residual connections can help avoid the degradation problem and allow for deeper, more efficient networks.
 
 ### **Why ResNets Outperform CNNs: A Gradient Comparison** 
 
@@ -60,7 +60,7 @@ pip install torch torchvision matplotlib opencv-python
 
 <span style="font-size:18px;">For each network, I selected one layer from the beginning and one from the end, then analyzed the **average gradient** with respect to the **weights** of those layers.  
 
-<span style="font-size:18px;"> What I expected to observe was that the gradient for the **initial layers of the ResNet** would be significantly larger compared to the **CNN**. However, as you'll see, the results were not as anticipated.
+<span style="font-size:18px;"> What I expected to observe was that the gradient for the **initial layers of the ResNet** on the rigt side of the picture below would be significantly larger compared to the **CNN** on the left. However, as you'll see, the results were not as anticipated.
 
 <div style="display: flex; justify-content: space-between;">
   <img src="Ex1/Results_grad/trained_CNN.png" alt="Plain35" width="45%">
@@ -70,7 +70,7 @@ pip install torch torchvision matplotlib opencv-python
 
 <span style="font-size:18px;">As you can observe, the magnitudes of the gradients for both networks are comparable. In the case of the CNN, there is no sign of the vanishing gradient problem.  
 
-<span style="font-size:18px;">The reason for this is quite simple. As highlighted in the original paper, the use of **Batch Normalization** and **ReLU activations** inherently ensures that both the **forward** and **backward** signals do not vanish.  
+<span style="font-size:18px;">The reason for this is quite simple. As highlighted in the [resnet paper](https://arxiv.org/abs/1512.03385), the use of **Batch Normalization** and **ReLU activations** inherently ensures that both the **forward** and **backward** signals do not vanish.  
 <br><br>
 <span style="font-size:18px;">To further test the hypothesis that **skip connections** are effective against the vanishing gradient problem, I decided to induce the issue by removing all **Batch Normalization layers** and replacing the **ReLU activations** with **tanh activations** in the models.
 <br><br>
@@ -170,7 +170,7 @@ python gradient_magitudes.py --metric <norm|std>
 
 ## **CNN NETWORK SURGERY**
 
-<span style="font-size:18px;">In this exercise, I trained a simple CNN on MNIST and replaced the classification layer with a decoder composed of transposed and upsampling convolutions, and then trained it on segmented version of the training set. This transformation allows the network to associate every pixel of the image with its corresponding class, effectively highlighting the number. The encoder consists of the convolutional layers of the pre-trained CNN, as suggested in the original paper. For this task it wasn't necessary to employ skip connections.
+<span style="font-size:18px;">In this exercise, I trained a simple CNN on MNIST and replaced the classification layer with a decoder composed of transposed and upsampling convolutions, and then trained it on segmented version of the training set. This transformation allows the network to associate every pixel of the image with its corresponding class, effectively highlighting the number. The encoder consists of the convolutional layers of the pre-trained CNN, as suggested in the paper on [Fully Convolutional Network](https://arxiv.org/abs/1411.4038). For this task it wasn't necessary to employ skip connections.
 Here, I present the results for some randomly selected images from the test set.
 <br><br>
 ![FullyConv grid](Ex2/results_ex2/covolutionalized_grid_res.png)
@@ -220,7 +220,7 @@ python fullyconv.py --model <MODEL_NAME> --mode <MODE> [--test_type <TEST_TYPE>]
 <br><br>
 ![cat cifar10](Ex3/images/cat.png)
 <br><br>
-<span style="font-size:18px;">I used a CNN that achieved an accuracy score of 0.80 on the test set.When analyzing the model's behavior, we observe that the generated heatmap highlights the details of the animal's face, which the model uses to correctly identify the cat.
+<span style="font-size:18px;">I used a CNN that achieved an accuracy of 0.80 on the cifar10 dataset. When analyzing the model's behavior, we observe that the generated heatmap highlights the details of the animal's face, which the model uses to correctly identify the cat.
 
 <br><br>
 <div style="display: flex; justify-content: space-between;">
